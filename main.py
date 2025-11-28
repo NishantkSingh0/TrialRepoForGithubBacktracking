@@ -90,3 +90,28 @@ if run_analysis:
             # --------------------------------------------------------------
 
             status.update(label="Scores Processed", state="complete",expanded=False)
+
+
+        with st.status("Creating DataFrame...") as status:
+            df=ut.CreateDataFrame(Commits=Commits, WhyImp=WhyImp, OutputScores=OutputScores)
+            status.update(label="DataFrame Created", state="complete")
+
+        st.markdown("---") 
+
+        # Top 100 analyzed Commits
+        with st.expander("Commits History", expanded=False):
+            st.dataframe(
+                df[["Commit Date", "ID", "Contributor", "Files Changed", "Why Important", "Scored", "Commit Message"]],
+                use_container_width=True
+            )
+
+        # group based on batch of 10
+        grouped_df = df.groupby(df.index // 10).agg({
+            "Commit Date": "first", 
+            "ID": list,
+            "Contributor": "first",
+            "Files Changed": list,
+            "Why Important": list,
+            "Scored": list,
+            "Commit Message": lambda x: ",\n\n".join(x) 
+        }).sort_values("Commit Date", ascending=True).reset_index(drop=True)
