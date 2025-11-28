@@ -1,5 +1,6 @@
 import streamlit as st
 import git_fetcher as gitf
+import utils as ut
 
 # Building sample Streamlit Layout for taking Github URL
 if "url" not in st.session_state:
@@ -80,3 +81,12 @@ if run_analysis:
 
                 # Update UI for realtime evaluation
                 placeholder.write(f"Processing commit {i+1}/{lenCommits}")
+            
+            # Filter Top 100 Commits based on analyzed scores
+            Commits, WhyImp, OutputScores = ut.FilterCommits(scores, Commits, WhyImportant)
+            
+            # --------------------------------------------------------------
+            # Commits, WhyImp, OutputScores = ut.ScoreAndFilterCommits(repo)
+            # --------------------------------------------------------------
+
+            status.update(label="Scores Processed", state="complete",expanded=False)
