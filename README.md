@@ -1,0 +1,3 @@
+This project allows users to instantly analyze a GitHub repository’s commit history and understand the linear flow of its codebase simply by providing the repository URL. It automatically fetches commits, parses file changes, and uses intelligent processing to generate structured insights that help developers quickly grasp how a project evolves.
+
+Along with commit breakdown, the tool also produces a clear, human-readable flow of how the code works internally. This makes it useful for onboarding, reviewing unfamiliar repositories, auditing code, and getting a high-level overview of any GitHub project without manually going through each file or commit.
