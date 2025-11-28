@@ -115,3 +115,23 @@ if run_analysis:
             "Scored": list,
             "Commit Message": lambda x: ",\n\n".join(x) 
         }).sort_values("Commit Date", ascending=True).reset_index(drop=True)
+
+        # Show grouped data
+        with st.expander("Top 10 Commits with neighbour information", expanded=False):
+            st.dataframe(grouped_df[["Commit Date","Contributor","Commit Message"]], use_container_width=True)
+        
+        CommitMessage = grouped_df['Commit Message'].tolist()
+        Prompt = ""
+        for i,comms in enumerate(CommitMessage):
+            Prompt+=f"Step{i+1}: "+comms+"\n---\n"
+
+        st.markdown("---") 
+        st.subheader("Series wise Repository Explanations")
+        with st.status("Generating Commit Explanations...") as status:
+            response=llm.respond(prompt=Prompt)
+            status.update(label="Commit explanation Generated", state="complete")
+        sections = response.split("\n---\n")
+        
+        for section in sections:
+            with st.container(border=True):
+                st.markdown(section)
